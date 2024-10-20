@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Memes Quiz</string>
+    <string name="yes_message">¡SÍ lo conozco!</string>
+    <string name="no_message">No... buuu...</string>
+    <string name="question_one">¿Conoces este meme?</string>
+    <string name="El_meme_del_Año">El meme del Año</string>
+    <string name="siguiente">Siguiente</string>
+    <string name="by_jonny_a">by Jonny A.</string>
+</resources>
