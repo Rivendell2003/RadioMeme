@@ -11,7 +11,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 
-// Lista de memes
 class RadioFragment : Fragment() {
     private val memeImages = listOf(
         R.drawable.meme1,
@@ -28,11 +27,20 @@ class RadioFragment : Fragment() {
     )
 
     private var currentIndex = 0
+    private var knownCount = 0
+    private var unknownCount = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // restauerar el estado si existe
+        savedInstanceState?.let {
+            currentIndex = it.getInt("currentIndex", 0)
+            knownCount = it.getInt("knownCount", 0)
+            unknownCount = it.getInt("unknownCount", 0)
+        }
+
         val view = inflater.inflate(R.layout.fragment_radio, container, false)
 
         val radioGroup = view.findViewById<RadioGroup>(R.id.radio_group)
@@ -40,29 +48,38 @@ class RadioFragment : Fragment() {
         val imageView = view.findViewById<ImageView>(R.id.imageView)
         val nextButton = view.findViewById<Button>(R.id.button_next)
 
-        // pone la primera imagen meme al iniciar
+        // muestra a la primera imagen meme al iniciar o al restaurar
         imageView.setImageResource(memeImages[currentIndex])
 
         radioGroup.setOnCheckedChangeListener { _, checkedId ->
-            when (checkedId) {
-                R.id.radio_button_yes -> {
-                    fragmentHeader.text = getString(R.string.yes_message)
-                }
-                R.id.radio_button_no -> {
-                    fragmentHeader.text = getString(R.string.no_message)
-                }
+            fragmentHeader.text = when (checkedId) {
+                R.id.radio_button_yes -> getString(R.string.yes_message)
+                R.id.radio_button_no -> getString(R.string.no_message)
+                else -> ""
             }
         }
 
         nextButton.setOnClickListener {
-            // verificaa si se selecciono un RadioButton
+            // chekea si se seleccionó un RadioButton
             if (radioGroup.checkedRadioButtonId == -1) {
-                // pone un mensaje si no se seleccionó nada
                 Toast.makeText(context, "Por favor selecciona una opción", Toast.LENGTH_SHORT).show()
             } else {
-                // avanza a la siguiente imagen
-                showNextMeme(imageView)
-                radioGroup.clearCheck() // clean a la selección actual
+                // ups el conteo según la selección
+                if (radioGroup.checkedRadioButtonId == R.id.radio_button_yes) {
+                    knownCount++
+                } else {
+                    unknownCount++
+                }
+
+                // goto a la siguiente imagen
+                currentIndex++
+                if (currentIndex >= memeImages.size) {
+                    showResults()
+                } else {
+                    showNextMeme(imageView)
+                }
+
+                radioGroup.clearCheck() // reset la selección actual
             }
         }
 
@@ -70,11 +87,28 @@ class RadioFragment : Fragment() {
     }
 
     private fun showNextMeme(imageView: ImageView) {
-        currentIndex = (currentIndex + 1) % memeImages.size
         imageView.setImageResource(memeImages[currentIndex])
-
-        // un pequeño slide de animación
+        // un pequeño efecto de desvanecimiento slide
         imageView.alpha = 0f
         imageView.animate().alpha(1f).setDuration(500).start()
+    }
+
+    private fun showResults() {
+        val resultsFragment = ResultsFragment().apply {
+            setResults(knownCount, unknownCount)
+        }
+
+        // replace el fragmento en el contenedor
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, resultsFragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("currentIndex", currentIndex)
+        outState.putInt("knownCount", knownCount)
+        outState.putInt("unknownCount", unknownCount)
     }
 }

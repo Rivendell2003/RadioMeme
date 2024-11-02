@@ -12,14 +12,25 @@
         android:layout_height="match_parent"
         android:layout_weight="2"
         android:scaleType="fitCenter"
+        android:contentDescription="@string/El_meme_del_Año"
         tools:ignore="ContentDescription" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_marginStart="16dp"
         android:orientation="vertical"
         android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/fragment_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fragment_radio_text_0"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:paddingBottom="16dp"/>
 
         <RadioGroup
             android:id="@+id/radio_group"
@@ -30,13 +41,13 @@
                 android:id="@+id/radio_button1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="No... buuu..." />
+                android:text="@string/yes_message" />
 
             <RadioButton
                 android:id="@+id/radio_button2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="¡SÍ lo conozco!" />
+                android:text="@string/no_message" />
 
         </RadioGroup>
 

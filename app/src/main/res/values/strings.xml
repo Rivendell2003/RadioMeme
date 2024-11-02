@@ -6,4 +6,14 @@
     <string name="El_meme_del_Año">El meme del Año</string>
     <string name="siguiente">Siguiente</string>
     <string name="by_jonny_a">by Jonny A.</string>
+
+    <string name="activity_main_text_0">by Jonny A.</string>
+    <string name="activity_main_text_1">Mostrar Imagen Fragmento</string>
+    <string name="activity_main_text_2">Cerrar</string>
+
+    <string name="known_count">Conocidos: %1$d</string>
+    <string name="unknown_count">Desconocidos: %1$d</string>
+
+    <string name="fragment_radio_text_0">¿Conoces este meme?</string>
+    <string name="fragment_radio_text_1">Siguiente</string>
 </resources>
